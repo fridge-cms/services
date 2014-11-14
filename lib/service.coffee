@@ -1,30 +1,32 @@
 through = require 'through2'
 
 module.exports = class Service
-  # convenience function to create new services
-  # service.create(function(msg) { ... })
-  @create: (f) ->
-    new Service(f)
-
   # Service constructor
   # params: handler function
   #
   # handler accepts the message object from the request and whatever is returned
   # from the handler will be sent back to the returnChannel.
-  constructor: (@f) ->
+  constructor: (@handler) ->
+    @listen() if @needsServer()
 
   # graft compatible function which invokes the micro service handler.
   call: ->
-    through.obj (msg, enc, cb) ->
+    through.obj (msg, enc, callback) =>
       # run service
-      msg.returnChannel.end @f?(msg)
-      cb()
+      msg.returnChannel.end @handler(msg)
+      callback()
+
+  # return true if a service is being called directly from node
+  needsServer: ->
+    for child in require.main.children
+      return true if child == module
+    false
 
   # start spdy server process to listen for incoming requests
-  listen: (port) ->
-    port = process.argv[2] || port
+  listen: (opts={}) ->
+    opts.port = process.argv[2] || 0 unless opts.port
     require 'graft/spdy'
-      .server port: port
+      .server opts
       .on 'ready', ->
-        console.log "Service listening on port", port
+        console.log "Service ready on port", opts.port
       .pipe @call()

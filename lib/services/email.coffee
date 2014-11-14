@@ -1,6 +1,6 @@
-service = require '../service'
+Service = require '../service'
 
-module.exports = email = service.create (msg) ->
+module.exports = new Service (msg) ->
   console.log "Hello from le micro service!"
   # what we need to send email
   # to
@@ -9,5 +9,3 @@ module.exports = email = service.create (msg) ->
   # message
   # attachments? <- streams?
   "STUFF"
-
-email.listen(3001)

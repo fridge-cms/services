@@ -1,17 +1,19 @@
 graft = require('graft')()
 ws    = require 'graft/ws'
-_     = require 'lodash'
-ret   = graft.ReadChannel()
+spdy  = require 'graft/spdy'
 
-module.exports =
-  init: (cmd, port) ->
+module.exports = class Client
+  constructor: (opts) ->
+    @ret = graft.ReadChannel()
     # connect to micro-service
-    graft.pipe(ws.client port: port)
+    # TODO spdy or ws? option?
+    graft.pipe(spdy.client opts)
 
   write: (data) ->
-    graft.write _.extend data, cmd: @cmd
+    data.returnChannel = @ret
+    graft.write data
 
-  on: (event, cb) ->
-    ret.on event, (msg) ->
-      cb?(msg)
+  on: (event, handler) ->
+    @ret.on event, (msg) ->
+      handler?(msg)
 
