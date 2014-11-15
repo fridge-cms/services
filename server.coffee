@@ -8,6 +8,7 @@ server = ws
   .pipe graft()
   .where cmd: 'register', new Service (msg) =>
     console.log @
+    process.exit()
 
   # attach micro service remotely
   # .where(cmd: 'email', spdy.client(port: 3001))

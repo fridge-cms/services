@@ -13,7 +13,8 @@ module.exports = class Service
   call: ->
     through.obj (msg, enc, callback) =>
       # run service
-      msg.returnChannel.end @handler(msg)
+      # msg.returnChannel.end @handler(msg)
+      @handler(msg)
       callback()
 
   # return true if a service is being called directly from node
