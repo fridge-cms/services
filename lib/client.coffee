@@ -4,16 +4,16 @@ spdy  = require 'graft/spdy'
 
 module.exports = class Client
   constructor: (opts) ->
-    @ret = graft.ReadChannel()
+    @res = graft.ReadChannel()
     # connect to micro-service
     # TODO spdy or ws? option?
     graft.pipe(spdy.client opts)
 
   write: (data) ->
-    data.returnChannel = @ret
+    data.res = @res
     graft.write data
 
   on: (event, handler) ->
-    @ret.on event, (msg) ->
+    @res.on event, (msg) ->
       handler?(msg)
 

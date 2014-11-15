@@ -7,13 +7,11 @@ module.exports = class Service
   # handler accepts the message object from the request and whatever is returned
   # from the handler will be sent back to the returnChannel.
   constructor: (@handler) ->
-    @listen() if @needsServer()
 
   # graft compatible function which invokes the micro service handler.
   call: ->
     through.obj (msg, enc, callback) =>
       # run service
-      # msg.returnChannel.end @handler(msg)
       @handler(msg)
       callback()
 
@@ -25,9 +23,9 @@ module.exports = class Service
 
   # start spdy server process to listen for incoming requests
   listen: (opts={}) ->
-    opts.port = process.argv[2] || 0 unless opts.port
     require 'graft/spdy'
       .server opts
-      .on 'ready', ->
-        console.log "Service ready on port", opts.port
+      .on 'ready', (server) ->
+        address = server.address()
+        console.log "Service listening on #{address.address}:#{address.port}"
       .pipe @call()

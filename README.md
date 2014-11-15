@@ -8,10 +8,10 @@ Start a service
 
 ```bash
 # start email micro service
-$ node_modules/.bin/forever start -c coffee lib/services/email.coffee 3000
+$ node_modules/.bin/forever start -c bin/ctl.coffee --port 3000
 ```
 
-Call a service
+Call a service using a client
 -----
 
 ```bash

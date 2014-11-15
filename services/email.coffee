@@ -1,4 +1,3 @@
-Service = require '../service'
 _       = require 'lodash'
 util    = require 'util'
 
@@ -12,7 +11,7 @@ util    = require 'util'
 # text
 # html
 # files
-module.exports = new Service (msg) ->
+module.exports = (msg) ->
   console.log "----> Email micro service"
   sendgrid = require('sendgrid')(msg.api_user, msg.api_key)
   email = new sendgrid.Email()
@@ -26,7 +25,7 @@ module.exports = new Service (msg) ->
   email.html    = msg.html
 
   sendgrid.send email, (err, json) ->
-    msg.returnChannel.end if err
+    msg.res.end if err
       util.inspect err
     else
       json
