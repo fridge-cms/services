@@ -8,7 +8,11 @@ Start a service
 
 ```bash
 # start email micro service
+# with forever
 $ forever start -c bin/ctl.coffee services/email.coffee --port 3000
+
+# without
+$ bin/ctl.coffee services/email.coffee --port 3000
 ```
 
 Call a service using a client
