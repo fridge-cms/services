@@ -2,10 +2,9 @@ graft = require('graft')()
 ws    = require 'graft/ws'
 spdy  = require 'graft/spdy'
 
-module.exports = class Client
+class Client
   constructor: (opts) ->
     @res = graft.ReadChannel()
-    # connect to micro-service
     # TODO spdy or ws? option?
     graft.pipe(spdy.client opts)
 
@@ -17,3 +16,6 @@ module.exports = class Client
     @res.on event, (msg) ->
       handler?(msg)
 
+module.exports =
+  open: (opts) ->
+    new Client(opts)
