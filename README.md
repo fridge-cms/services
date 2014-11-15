@@ -8,7 +8,7 @@ Start a service
 
 ```bash
 # start email micro service
-$ node_modules/.bin/forever start -c bin/ctl.coffee --port 3000
+$ forever start -c bin/ctl.coffee services/email.coffee --port 3000
 ```
 
 Call a service using a client
