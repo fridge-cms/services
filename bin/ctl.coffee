@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 
 path    = require 'path'
-forever = require 'forever'
+_       = require 'lodash'
 Service = require '../lib/service'
 
 root = path.dirname __dirname
@@ -20,5 +20,9 @@ unless program.args.length
   program.help()
   process.exit()
 
-service = new Service require(program.args[0])
-service.listen(port: port)
+service = require program.args[0]
+
+if _.isFunction service
+  new Service(service).listen(port: port)
+else
+  service.listen(port: port)

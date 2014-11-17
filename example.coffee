@@ -3,6 +3,7 @@ client = require './lib/client'
 email = client.open port: 3000
 
 email.write
+  cmd: "email"
   api_user: process.env.SENDGRID_USER
   api_key: process.env.SENDGRID_KEY
   to: ["tamagokun@gmail.com"]
