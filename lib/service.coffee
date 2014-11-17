@@ -15,12 +15,6 @@ module.exports = class Service
       @handler(msg)
       callback()
 
-  # return true if a service is being called directly from node
-  needsServer: ->
-    for child in require.main.children
-      return true if child == module
-    false
-
   # start spdy server process to listen for incoming requests
   listen: (opts={}) ->
     require 'graft/spdy'
